@@ -218,7 +218,7 @@ done
 
 case "$ROOT" in
 	*mtd*)
-		insmod /rk30xxnand-3.0.36+.ko
+		#insmod /rk30xxnand-3.0.36+.ko
 		;;
 esac
 
