@@ -10,12 +10,23 @@ esac
 
 rm -rf /dev/block/mtd/by-name/
 mkdir -p /dev/block/mtd/by-name
-for i in `ls -d /sys/class/mtd/mtd*[0-9]`; do
-    name=`cat $i/name`
-    tmp="`echo $i | sed -e 's/mtd/mtdblock/g'`"
-    dev="`echo $tmp |sed -e 's/\/sys\/class\/mtdblock/\/dev/g'`"
-    ln -s $dev /dev/block/mtd/by-name/$name
-done
+if [ -d /sys/class/mtd/ ]; then
+    # nand
+    for i in `ls /sys/class/mtd/mtd[0-9]*/name`; do
+	    name=`cat ${i}`
+	    i=${i##*mtd}
+	    i=${i%/name}
+	    ln -s /dev/mtdblock${i} /dev/block/mtd/by-name/${name}
+    done
+else
+    # emmc
+    for i in `ls /sys/block/mmcblk0/mmcblk0p*/volname`; do
+	    name=`cat ${i}`
+	    i=${i##*mmcblk0/}
+	    i=${i%/volname}
+	    ln -s /dev/${i} /dev/block/mtd/by-name/${name}
+    done
+fi
 
 exit 0
 
