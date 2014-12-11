@@ -4,6 +4,7 @@
 [ -d /root ] || mkdir -m 0700 /root
 [ -d /sys ] || mkdir /sys
 [ -d /proc ] || mkdir /proc
+[ -d /run ] || mkdir /run
 [ -d /tmp ] || mkdir /tmp
 mkdir -p /var/lock
 mount -t sysfs -o nodev,noexec,nosuid sysfs /sys

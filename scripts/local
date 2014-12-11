@@ -13,7 +13,14 @@ pre_mountroot()
 	fi
 
 	while [ -z "${FSTYPE}" ]; do
-		FSTYPE=$(wait-for-root "${ROOT}" ${ROOTDELAY:-30})
+        tmp_count=1
+        while ! wait-for-root "${ROOT}" 1; do
+            if [ $tmp_count -gt ${ROOTDELAY:-30} ]; then
+                break
+            fi
+        done
+        unset tmp_count
+ 		FSTYPE=$(wait-for-root "${ROOT}" 1)
 
 		# Load ubi with the correct MTD partition and return since
 		# fstype doesn't work with a char device like ubi.
