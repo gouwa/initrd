@@ -18,6 +18,7 @@ pre_mountroot()
             if [ $tmp_count -gt ${ROOTDELAY:-30} ]; then
                 break
             fi
+            tmp_count=$(($tmp_count+1))
         done
         unset tmp_count
  		FSTYPE=$(wait-for-root "${ROOT}" 1)

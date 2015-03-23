@@ -20,6 +20,16 @@ if [ -d /sys/class/mtd/ ]; then
     done
 else
     # emmc
+    i=1
+    while ! ls /dev/mmcblk0p* >/dev/null 2>&1; do
+        if [ $i -gt 10 ]; then
+	    echo "Timeout!"
+            exit 1
+        fi
+	echo "Waiting for eMMC storage..."
+	i=$(($i+1))
+    done
+ 
     for i in `ls /sys/block/mmcblk0/mmcblk0p*/volname`; do
 	    name=`cat ${i}`
 	    i=${i##*mmcblk0/}
